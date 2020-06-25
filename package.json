@@ -1,0 +1,41 @@
+{
+	"name": "redis-iterate-keys",
+	"description": "Iterate over keys in Redis, using the SCAN command.",
+	"version": "1.0.0",
+	"main": "index.js",
+	"files": [
+		"index.js",
+		"example.js"
+	],
+	"keywords": [
+		"redis",
+		"keys",
+		"scan",
+		"iterator",
+		"iterable"
+	],
+	"author": "Jannis R <mail@jannisr.de>",
+	"homepage": "https://github.com/derhuerst/redis-iterate-keys",
+	"repository": "derhuerst/redis-iterate-keys",
+	"bugs": "https://github.com/derhuerst/redis-iterate-keys/issues",
+	"license": "ISC",
+	"engines": {
+		"node": ">=10"
+	},
+	"dependencies": {
+		"tape": "^5.0.1"
+	},
+	"peerDependencies": {
+		"ioredis": "^4.17.3"
+	},
+	"devDependencies": {
+		"eslint": "^7.3.0",
+		"ioredis": "^4.17.3",
+		"tap-min": "^2.0.0"
+	},
+	"scripts": {
+		"test": "env NODE_ENV=dev node test.js | tap-min",
+		"lint": "eslint .",
+		"prepublishOnly": "npm test && npm run lint"
+	}
+}
