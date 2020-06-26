@@ -16,7 +16,12 @@ const keysAsyncIterator = (redis, chunkSize = 20) => {
 
 			const [cursor, newBufferedKeys] = await op
 			bufferedKeys = bufferedKeys.concat(newBufferedKeys)
-			end = cursor === '0'
+
+			if (bufferedKeys.length === 0) {
+				// stop immediately
+				return {done: true, value: null}
+			}
+			end = cursor === '0' // stop in next iteration
 		}
 		return {done: false, value: bufferedKeys.shift()}
 	}
