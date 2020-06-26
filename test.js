@@ -53,7 +53,7 @@ test('calls redis.scan properly', async (t) => {
 		t.equal(count, 10)
 		return await scan(cursor, paramName, count)
 	}
-	const it = iterateKeys({scan: _scan}, 10)
+	const it = iterateKeys({scan: _scan}, {batchSize: 10})
 
 	await it.next()
 	await it.next()
@@ -80,10 +80,21 @@ test('two iterables share the config', async (t) => {
 		t.equal(count, 3)
 		return await scan(cursor, paramName, count)
 	}
-	const it = iterateKeys({scan: _scan}, 3)
+	const it = iterateKeys({scan: _scan}, {batchSize: 3})
 	const it2 = it[Symbol.asyncIterator]()
 
 	await it2.next()
+})
+
+test('MATCH works', async (t) => {
+	const _scan = async (_, __, ___, match, pattern) => {
+		t.equal(match, 'MATCH')
+		t.equal(pattern, 'foo*')
+		return await scan(_, __, ___, match, pattern)
+	}
+
+	const it = iterateKeys({scan: _scan}, {match: 'foo*'})
+	await it.next()
 })
 
 test('works with real Redis', async (t) => {
@@ -94,7 +105,8 @@ test('works with real Redis', async (t) => {
 	}
 
 	const res = []
-	for await (const val of iterateKeys(redis, 2)) res.push(val)
+	const it = iterateKeys(redis, {batchSize: 2})
+	for await (const key of it) res.push(key)
 	t.deepEqual(res.sort(), ['a', 'b', 'c', 'd', 'e'])
 
 	redis.quit()

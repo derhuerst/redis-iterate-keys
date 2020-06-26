@@ -30,6 +30,21 @@ for await (const key of iterateKeys(redis)) {
 redis.quit()
 ```
 
+```js
+iterateKeys(redisClient, opt = {})
+```
+
+You can pass the following options:
+
+- `opt.match`: Match keys with a pattern, see the [`MATCH` docs](https://redis.io/commands/scan#the-match-option)
+- `opt.batchSize`: How many keys to retrieve in one `SCAN` call. Set it to a higher number for higher iteration speed. Default: 20
+
+
+## Related
+
+- [`redis-scanrx`](https://github.com/sukobuto/redis-scanrx) – Rx interface to Redis `SCAN`.
+- [`redis-skim`](https://github.com/mattbudish/redis-skim) – Callback interface to Redis `SCAN`.
+
 
 ## Contributing
 
